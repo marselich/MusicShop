@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MusicShop</string>
+    <string name="app_name">Music Shop</string>
+    <string name="order_activity_name">Your order</string>
 </resources>

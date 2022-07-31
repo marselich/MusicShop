@@ -2,13 +2,16 @@ package ru.kalievmars.musicshop;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -19,8 +22,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button buttonMinus, buttonPlus;
+    private Button buttonMinus, buttonPlus, addToCart;
     private TextView textQuantity, textOrderPrice;
+    private EditText editText;
     private ImageView imageOrder;
     private Spinner spinner;
     private ArrayAdapter<CharSequence> arrayAdapter;
@@ -40,8 +44,13 @@ public class MainActivity extends AppCompatActivity {
         textOrderPrice = findViewById(R.id.text_order_price);
         imageOrder = findViewById(R.id.image_order);
 
+        addToCart = findViewById(R.id.add_to_cart);
+        editText = findViewById(R.id.edittext);
+
         buttonMinus.setOnClickListener(changeOrderCountOnClickListener);
         buttonPlus.setOnClickListener(changeOrderCountOnClickListener);
+
+        addToCart.setOnClickListener(addToCartListener);
 
         setSpinner();
 
@@ -95,6 +104,25 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     break; // TODO
             }
+        }
+    };
+
+    View.OnClickListener addToCartListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Order order = new Order(editText.getText().toString(),
+                    spinner.getSelectedItem().toString(),
+                    getOrderPrice(),
+                    quantity);
+
+            Log.d("orderLog", order.toString());
+
+            Intent orderIntent = new Intent(MainActivity.this, OrderActivity.class);
+            orderIntent.putExtra("buyerName", order.getBuyerName());
+            orderIntent.putExtra("orderName", order.getOrderName());
+            orderIntent.putExtra("price", order.getPrice());
+            orderIntent.putExtra("quantity", order.getQuantity());
+            startActivity(orderIntent);
         }
     };
 
